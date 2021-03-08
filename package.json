@@ -1,0 +1,27 @@
+{
+  "name": "JUMBOGPS-T1",
+  "version": "1.0.0",
+  "description": "This project focuses on asset tracking using GPS data and provide a GUI interface for the end user which allows to\r track the assets in realtime.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js -e .js,.html,.css,.hbs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Crio-Winter-of-Doing-2021/JUMBOGPS-T1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Crio-Winter-of-Doing-2021/JUMBOGPS-T1/issues"
+  },
+  "homepage": "https://github.com/Crio-Winter-of-Doing-2021/JUMBOGPS-T1#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "geolib": "^3.3.1",
+    "mongoose": "^5.11.18"
+  }
+}
