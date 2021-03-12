@@ -10,11 +10,16 @@ const app = express()
 
 app.use(express.static(publicDirPath))
 app.use(express.json())
+app.use(assetRouter)
 
 const port = process.env.port || 3000
+
+app.get('/', (req, res) => {
+
+    res.render('index')
+
+})
 
 app.listen(port, () => {
     console.log(`Started Server on port ${port}`)
 })
-
-app.use(assetRouter)
