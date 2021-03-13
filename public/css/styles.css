@@ -1,0 +1,37 @@
+#logoImg{
+    width: 100%;
+    height: auto;
+}
+
+#viewForm{
+  justify-content: center;
+}
+
+#assetViewForm{
+  width: 90%;
+  margin: auto;
+}
+
+#timelineViewForm{
+  width: 90%;
+  margin: auto;
+}
+
+#timelineViewContainer{
+  display: none;
+}
+
+.errorBox{
+    width: 100%;
+    color: red;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+#assetViewErrorBox{
+    display: none;
+}
+
+#timelineViewErrorBox{
+    display: none;
+}
