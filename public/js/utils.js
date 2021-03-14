@@ -124,6 +124,7 @@ const setTimeLineView = (features, center) => {
     map.getSource('timeline').setData({'type': 'FeatureCollection', features})
 
     removeMarkers('asset')
+    removeMarkers('timeline')
     createMarkers(features, 'timeline')
     addMarkers('timeline')
     
@@ -145,6 +146,7 @@ const setAllAssetsView = (features, center) => {
     map.getSource('places').setData({'type': 'FeatureCollection', features})
 
     removeMarkers('timeline')
+    removeMarkers('asset')
     createMarkers(features, 'asset')
     addMarkers('asset')
     
