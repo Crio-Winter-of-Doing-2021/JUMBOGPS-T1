@@ -46,8 +46,8 @@ var map = new mapboxgl.Map({
 
         })
 
-        createMarkers(features)
-        addMarkers()
+        createMarkers(features, 'asset')
+        addMarkers('asset')
         
 
         map.addSource('places', {

@@ -1,4 +1,6 @@
-let allMarkers = []
+let assetViewMarkers = []
+let timelineViewMarkers = []
+
 const toDateTime = (timestamp) => {
     const months_arr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     
@@ -63,7 +65,7 @@ const closePopups = () => {
     for(popup of popups){ popup.remove() }
 }
 
-const createMarkers = (features) => {
+const createMarkers = (features, view) => {
 
     features.forEach((feature) => {
 
@@ -78,22 +80,36 @@ const createMarkers = (features) => {
         const marker = new mapboxgl.Marker(el).setLngLat(feature.geometry.coordinates)
         .setPopup(popup) 
 
-        allMarkers.push(marker)
+        if(view === 'asset'){
+            assetViewMarkers.push(marker)
+        }else if(view === 'timeline'){
+            timelineViewMarkers.push(marker)
+        }
+        
 
     })
 
 }
 
-const addMarkers = () => {
+const addMarkers = (view) => {
     
-    allMarkers.forEach(marker => marker.addTo(map))
+    if(view === 'asset'){
+        assetViewMarkers.forEach(marker => marker.addTo(map))
+    }else if(view === 'timeline'){
+        timelineViewMarkers.forEach(marker => marker.addTo(map))
+    }
 
 }
 
-const removeMarkers = () => {
+const removeMarkers = (view) => {
 
-    allMarkers.forEach(marker => marker.remove())
-    allMarkers = [] 
+    if(view === 'asset'){
+        assetViewMarkers.forEach(marker => marker.remove())
+        assetViewMarkers = []
+    }else if(view === 'timeline'){
+        timelineViewMarkers.forEach(marker => marker.remove())
+        timelineViewMarkers = []
+    }
 
 }
 
@@ -107,9 +123,9 @@ const setTimeLineView = (features, center) => {
     // setData() only requires geoJSON data variable
     map.getSource('timeline').setData({'type': 'FeatureCollection', features})
 
-    removeMarkers()
-    createMarkers(features)
-    addMarkers()
+    removeMarkers('asset')
+    createMarkers(features, 'timeline')
+    addMarkers('timeline')
     
     map.setCenter([center.latitude,center.longitude])
     
@@ -128,9 +144,9 @@ const setAllAssetsView = (features, center) => {
     // setData() only requires geoJSON data variable
     map.getSource('places').setData({'type': 'FeatureCollection', features})
 
-    removeMarkers()
-    createMarkers(features)
-    addMarkers()
+    removeMarkers('timeline')
+    createMarkers(features, 'asset')
+    addMarkers('asset')
     
     map.setCenter([center.latitude,center.longitude])
     
