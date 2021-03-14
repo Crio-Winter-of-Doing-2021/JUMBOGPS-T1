@@ -59,8 +59,7 @@ try{
                 <strong>Asset Type:</strong> ${assetType}<br>
                 <strong>Time:</strong> ${dateTime.time}<br>
                 <strong>Date:</strong> ${dateTime.date}<br>
-            </p>`,
-            'icon': 'theatre'
+            </p>`
             },
             'geometry': {
             'type': 'Point',
@@ -153,8 +152,7 @@ async function setAllAssets(markers=100, assetType=undefined, id=undefined){
                     <center>
                     <a href='javascript:void(0)' onclick='setTimeLine("${asset._id}")'>Get Timeline</a>
                     </center>
-                    </p>`,
-                    'icon': 'theatre'
+                    </p>`
                     },
                     'geometry': {
                     'type': 'Point',
@@ -165,6 +163,10 @@ async function setAllAssets(markers=100, assetType=undefined, id=undefined){
             })
 
             setAllAssetsView(features, center)
+
+            // update the center for asset view state
+            allAssetViewState.center = [center.latitude, center.longitude]
+
             clearAssetViewErrorMessage()
 
         }catch (e){

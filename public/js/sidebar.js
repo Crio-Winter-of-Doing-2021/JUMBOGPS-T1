@@ -7,7 +7,7 @@ document.querySelector('#viewSelector').addEventListener('change', function() {
  if(view == 'Asset'){
     timelineViewContainer.style.display = "none"
     assetViewContainer.style.display = "block"
-    showAssetsView()
+    setAllAssets(100, undefined, undefined)
  }else if(view == 'Timeline'){
     assetViewContainer.style.display = "none"
     timelineViewContainer.style.display = "block"

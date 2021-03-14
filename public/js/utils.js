@@ -1,3 +1,6 @@
+let assetViewMarkers = []
+let timelineViewMarkers = []
+
 const toDateTime = (timestamp) => {
     const months_arr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     
@@ -62,6 +65,54 @@ const closePopups = () => {
     for(popup of popups){ popup.remove() }
 }
 
+const createMarkers = (features, view) => {
+
+    features.forEach((feature) => {
+
+        // create a HTML element for each feature
+        var el = document.createElement('div')
+        el.className = 'marker'
+        
+        const popup = new mapboxgl.Popup({ offset: 25 }).
+                    setHTML(feature.properties.description)
+
+        // make a marker for each feature and add to the map
+        const marker = new mapboxgl.Marker(el).setLngLat(feature.geometry.coordinates)
+        .setPopup(popup) 
+
+        if(view === 'asset'){
+            assetViewMarkers.push(marker)
+        }else if(view === 'timeline'){
+            timelineViewMarkers.push(marker)
+        }
+        
+
+    })
+
+}
+
+const addMarkers = (view) => {
+    
+    if(view === 'asset'){
+        assetViewMarkers.forEach(marker => marker.addTo(map))
+    }else if(view === 'timeline'){
+        timelineViewMarkers.forEach(marker => marker.addTo(map))
+    }
+
+}
+
+const removeMarkers = (view) => {
+
+    if(view === 'asset'){
+        assetViewMarkers.forEach(marker => marker.remove())
+        assetViewMarkers = []
+    }else if(view === 'timeline'){
+        timelineViewMarkers.forEach(marker => marker.remove())
+        timelineViewMarkers = []
+    }
+
+}
+
 const setTimeLineView = (features, center) => {
 
     closePopups()
@@ -71,6 +122,10 @@ const setTimeLineView = (features, center) => {
             
     // setData() only requires geoJSON data variable
     map.getSource('timeline').setData({'type': 'FeatureCollection', features})
+
+    removeMarkers('asset')
+    createMarkers(features, 'timeline')
+    addMarkers('timeline')
     
     map.setCenter([center.latitude,center.longitude])
     
@@ -85,9 +140,13 @@ const setAllAssetsView = (features, center) => {
 
     // hide a layer
     map.setLayoutProperty('timeline','visibility','none')
-            
+
     // setData() only requires geoJSON data variable
     map.getSource('places').setData({'type': 'FeatureCollection', features})
+
+    removeMarkers('timeline')
+    createMarkers(features, 'asset')
+    addMarkers('asset')
     
     map.setCenter([center.latitude,center.longitude])
     
@@ -104,8 +163,8 @@ const showAssetsView = () => {
     // hide a layer
     map.setLayoutProperty('timeline','visibility','none')
 
-    map.setCenter([allAssetState.centerLatitude,allAssetState.centerLongitude])
-    map.setZoom(allAssetState.zoomLevel)
+    map.setCenter(allAssetViewState.center)
+    map.setZoom(allAssetViewState.zoom)
 
     // show a layer
     map.setLayoutProperty('places','visibility','visible')

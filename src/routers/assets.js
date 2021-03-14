@@ -47,9 +47,10 @@ router.post('/assets/:id/location',  async (req, res) => {
          const asset = await Asset.findById(req.params.id)
          const {startTime,endTime} = req.query
 
+         let locations ;
          if(startTime || endTime){
 
-             let locations ;
+             
              if(startTime && endTime){
                 locations = asset.getBetween(parseInt(startTime), parseInt(endTime)) 
              }else if(startTime){
@@ -64,17 +65,25 @@ router.post('/assets/:id/location',  async (req, res) => {
                 })
             }
 
-            asset.location = locations
+         }else{
+             // default 
+            
+            const lastLocationTimeStamp = asset.location[asset.location.length - 1].timestamp
+
+            // location of last 24 hrs. from last location
+            locations = asset.getBetween(lastLocationTimeStamp-86400,lastLocationTimeStamp)
 
          }
  
          const coords = [] 
-         asset.location.forEach(location => {
+         locations.forEach(location => {
              coords.push({
                  latitude: location.latitude,
                  longitude: location.longitude
              })
          })
+
+         asset.location = locations
  
          const center = geolib.getCenter(coords)
  
