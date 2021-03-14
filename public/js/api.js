@@ -165,6 +165,10 @@ async function setAllAssets(markers=100, assetType=undefined, id=undefined){
             })
 
             setAllAssetsView(features, center)
+
+            // update the center for asset view state
+            allAssetViewState.center = [center.latitude, center.longitude]
+
             clearAssetViewErrorMessage()
 
         }catch (e){

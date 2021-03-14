@@ -104,8 +104,8 @@ const showAssetsView = () => {
     // hide a layer
     map.setLayoutProperty('timeline','visibility','none')
 
-    map.setCenter([allAssetState.centerLatitude,allAssetState.centerLongitude])
-    map.setZoom(allAssetState.zoomLevel)
+    map.setCenter(allAssetViewState.center)
+    map.setZoom(allAssetViewState.zoom)
 
     // show a layer
     map.setLayoutProperty('places','visibility','visible')

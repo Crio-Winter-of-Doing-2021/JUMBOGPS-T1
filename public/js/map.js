@@ -1,3 +1,8 @@
+let allAssetViewState = {
+    center: [72.8925973,19.0452754],
+    zoom:4
+  }
+
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
@@ -98,7 +103,7 @@ var map = new mapboxgl.Map({
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
          
-        let popup = new mapboxgl.Popup()
+        let popup = new mapboxgl.Popup({ offset: 15 })
 
         popup.setLngLat(coordinates)
         .setHTML(description)
