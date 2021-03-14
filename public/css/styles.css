@@ -1,3 +1,11 @@
+.marker{
+  background-image: url('../assets/imgs/marker1.png');
+  background-size: cover;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
 #logoImg{
     width: 100%;
     height: auto;

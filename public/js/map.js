@@ -36,8 +36,7 @@ var map = new mapboxgl.Map({
                 <center>
                 <a href='javascript:void(0)' onclick='setTimeLine("${asset._id}")'>Get Timeline</a>
                 </center>
-                </p>`,
-                'icon': 'theatre'
+                </p>`
                 },
                 'geometry': {
                 'type': 'Point',
@@ -46,6 +45,10 @@ var map = new mapboxgl.Map({
             })
 
         })
+
+        createMarkers(features)
+        addMarkers()
+        
 
         map.addSource('places', {
         'type': 'geojson',
@@ -94,7 +97,6 @@ var map = new mapboxgl.Map({
         // location of the feature, with description HTML from its properties.
         map.on('click', layer, function (e) {
         var coordinates = e.features[0].geometry.coordinates.slice();
-        var description = e.features[0].properties.description;
          
         // Ensure that if the map is zoomed out such that multiple
         // copies of the feature are visible, the popup appears
@@ -103,12 +105,8 @@ var map = new mapboxgl.Map({
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
          
-        let popup = new mapboxgl.Popup({ offset: 15 })
-
-        popup.setLngLat(coordinates)
-        .setHTML(description)
-        .addTo(map);
         });
+        
 
         map.on('closePopup', () => {
             popup.remove()
