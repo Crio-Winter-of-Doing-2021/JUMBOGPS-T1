@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+// time based filter
 const {justGreaterEqual, justLesserEqual} = require('../utils/utils')
 
 const locationSchema = new mongoose.Schema({
@@ -26,9 +27,32 @@ const locationSchema = new mongoose.Schema({
     }
 })
 
+const LatLongSchema = new mongoose.Schema({
+    latitude: {
+        type: Number,
+        required: true,
+        validate(latitude){
+            if(!(isFinite(latitude) && Math.abs(latitude) <= 90)){
+                throw new Error('Latitude should be a number between -90 and 90')
+            }
+        }
+    },
+    longitude: {
+        type: Number,
+        required: true,
+        validate(longitude){
+            if(!(isFinite(longitude) && Math.abs(longitude) <= 180)){
+                throw new Error('Longitude should be a number between -180 and 180')
+            }
+        }
+    }
+})
+
 // setting up the collection schema (equivalent to SQL DB Schema)
 const assetSchema = new mongoose.Schema({
     location:[locationSchema],
+    geofence:[LatLongSchema],
+    presetroute:[LatLongSchema],
     assetType: {
         type: String
     }
