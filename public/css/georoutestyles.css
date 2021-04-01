@@ -1,0 +1,26 @@
+#geoRouteViewForm{
+    width: 90%;
+    margin: auto;
+  }
+
+  .errorBox{
+  width: 100%;
+  color: red;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.successBox{
+  width: 100%;
+  color: rgb(108, 235, 108);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#geoRouteViewErrorBox{
+  display: none;
+}
+
+#geoRouteViewSuccessBox{
+  display: none;
+}

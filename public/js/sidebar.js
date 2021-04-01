@@ -7,9 +7,11 @@ document.querySelector('#viewSelector').addEventListener('change', function() {
  if(view == 'Asset'){
     timelineViewContainer.style.display = "none"
     assetViewContainer.style.display = "block"
+    document.querySelector('#timelineViewID').value = ''
     setAllAssets(100, undefined, undefined)
  }else if(view == 'Timeline'){
     assetViewContainer.style.display = "none"
+    document.querySelector('#timelineViewID').value = ''
     timelineViewContainer.style.display = "block"
  }
 

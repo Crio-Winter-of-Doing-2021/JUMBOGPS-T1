@@ -1,16 +1,100 @@
 const express = require('express')
 const router = express.Router()
 const Asset = require('../models/asset')
+const Notification = require('../models/notification')
 const geolib = require('geolib')
 const mongoose = require('mongoose')
+const auth = require('../middleware/auth')
 
+// google map's algorithm based anomaly detection 
+const {isLocationOnPath} = require('../utils/routeTracking')
+
+// location data comes here
 router.post('/assets/:id/location',  async (req, res) => {
 
+try{
     const locationData = req.body.data
+
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+        return res.status(400).send({
+            message: "Invalid Asset ID"
+        })
+    }
  
-    const asset = new Asset();
- 
+    const asset = await Asset.findById(req.params.id);
+
+    if(!asset){
+        return res.status(404).send({
+            message: "Asset with given ID not found"
+        })
+    }
+
     locationData.sort((o1, o2) => o1.timestamp - o2.timestamp);
+
+    if(asset.geofence.length !== 0){
+        // if a geofence is there 
+        const lastLocation = locationData[locationData.length - 1]
+        const lastLatitude = lastLocation.latitude
+        const lastLongitude = lastLocation.longitude
+        const lastLocationTimeStamp = lastLocation.timestamp
+        
+        const formattedGeoFence = [] 
+        asset.geofence.forEach(coordinate => formattedGeoFence.push({latitude: coordinate.latitude,
+        longitude: coordinate.longitude}))
+
+        // check if given location inside geofence or not 
+        const isInsideFence = geolib.isPointInPolygon(
+            {latitude: lastLatitude, 
+            longitude: lastLongitude},
+            formattedGeoFence)
+
+            if(!isInsideFence){
+
+                // trigger Notification 
+                const notification = new Notification()
+
+                notification.type = 0
+                notification.asset_id = asset._id
+                notification.last_location = { 
+                    latitude: lastLatitude,
+                    longitude: lastLongitude,
+                    timestamp: lastLocationTimeStamp
+                }
+
+                await notification.save()
+
+            }
+
+    }
+
+    if(asset.presetroute.length !== 0){
+        // presetroute is defined
+        locationData.every(async (location) => {
+            const point = {latitude: location.latitude, longitude: location.longitude}
+            const isOnPresetRoute = isLocationOnPath(point, asset.presetroute, geodesic=false, tolerance=30)
+            if(!isOnPresetRoute){
+                // trigger notification , 
+                
+                const notification = new Notification()
+
+                notification.type = 1
+                notification.asset_id = asset._id
+                notification.last_location = { 
+                    latitude: location.latitude,
+                    longitude: location.longitude,
+                    timestamp: location.timestamp
+                }
+
+                await notification.save()
+
+                // notify only on first deviation for a given batch of coordinates
+                return false
+            }
+
+            return true
+        })
+
+    }
  
     locationData.forEach(location => {
      
@@ -21,8 +105,6 @@ router.post('/assets/:id/location',  async (req, res) => {
          })
  
     });
- 
-    try{
  
     await asset.save()
     res.send()
@@ -45,6 +127,13 @@ router.post('/assets/:id/location',  async (req, res) => {
         }
  
          const asset = await Asset.findById(req.params.id)
+
+         if(!asset){
+            return res.status(404).send({
+                message: "Asset with given ID not found"
+            })
+        }
+
          const {startTime,endTime} = req.query
 
          let locations ;
@@ -183,5 +272,100 @@ router.post('/assets/:id/location',  async (req, res) => {
  
   })
 
-  module.exports = router
+  router.post('/assets/:id/geofence', async (req, res) => {
 
+        try{
+
+            if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+                return res.status(400).send({
+                    message: "Invalid Asset ID"
+                })
+            }
+
+            const asset = await Asset.findById(req.params.id)
+
+            if(!asset){
+                return res.status(404).send({
+                    message: "Asset with given ID not found"
+                })
+            }
+
+            const geoFence = req.body.data
+
+            // remove any previous geofence
+            let message = ''
+
+            if(asset.geofence.length === 0){
+                message = 'Geofence Added Successfully'
+            }else{
+                message = 'Geofence Updated Successfully'
+            }
+
+            if(!Array.isArray(geoFence) || geoFence.length === 0){
+                return res.status(400).send({
+                    message: "Geofence was empty or of invalid format"
+                })
+            }
+            
+            asset.geofence = geoFence
+
+            await asset.save()
+
+            res.send({ message })
+
+
+        }catch (e){
+            res.send(e)
+        }
+
+  })
+
+  router.post('/assets/:id/georoute', async (req, res) => {
+
+    try{
+
+        if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+            return res.status(400).send({
+                message: "Invalid Asset ID"
+            })
+        }
+
+        const asset = await Asset.findById(req.params.id)
+
+        if(!asset){
+            return res.status(404).send({
+                message: "Asset with given ID not found"
+            })
+        }
+
+        const geoRoute = req.body.data
+
+        // remove any previous geofence
+        let message = ''
+
+        if(asset.presetroute.length === 0){
+            message = 'GeoRoute Added Successfully'
+        }else{
+            message = 'GeoRoute Updated Successfully'
+        }
+
+        if(!Array.isArray(geoRoute) || geoRoute.length === 0){
+            return res.status(400).send({
+                message: "GeoRoute was empty or of invalid format"
+            })
+        }
+        
+        asset.presetroute = geoRoute
+
+        await asset.save()
+
+        res.send({ message })
+
+
+    }catch (e){
+        res.send(e)
+    }
+
+})
+
+module.exports = router

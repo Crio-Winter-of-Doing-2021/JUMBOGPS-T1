@@ -113,12 +113,42 @@ const removeMarkers = (view) => {
 
 }
 
-const setTimeLineView = (features, center) => {
+const setTimeLineView = (features, center, geofence) => {
 
     closePopups()
+    document.querySelector('#viewSelector').value = 'Timeline'
+    document.querySelector('#assetViewContainer').style.display = 'none'
+    document.querySelector('#timelineViewContainer').style.display = 'block'
     
-    // hide a layer
+    // hide all previous layers
     map.setLayoutProperty('places','visibility','none')
+    map.setLayoutProperty('fence','visibility','none')
+
+    if(geofence.length !=0 ){
+        // geofence exists
+
+        const coordinates = []
+
+        coordinates.push([])
+
+        geofence.forEach(coordinate => coordinates[0].push([coordinate.longitude, coordinate.latitude]))
+
+        const features = []
+
+        features.push({
+                
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+            "type": "Polygon",
+            "coordinates": coordinates
+            }
+            
+    })
+
+        map.getSource('geofence').setData({'type': 'FeatureCollection', features})
+
+    }
             
     // setData() only requires geoJSON data variable
     map.getSource('timeline').setData({'type': 'FeatureCollection', features})
@@ -128,19 +158,22 @@ const setTimeLineView = (features, center) => {
     createMarkers(features, 'timeline')
     addMarkers('timeline')
     
-    map.setCenter([center.latitude,center.longitude])
+    map.setCenter([center.longitude, center.latitude])
     
-    map.setZoom(13)
+    map.setZoom(9)
     
     map.setLayoutProperty('timeline','visibility','visible')
+    map.setLayoutProperty('fence','visibility','visible')
+
 }
 
 const setAllAssetsView = (features, center) => {
     
     closePopups()
 
-    // hide a layer
+    // hide all previous layer
     map.setLayoutProperty('timeline','visibility','none')
+    map.setLayoutProperty('fence','visibility','none')
 
     // setData() only requires geoJSON data variable
     map.getSource('places').setData({'type': 'FeatureCollection', features})
@@ -150,11 +183,12 @@ const setAllAssetsView = (features, center) => {
     createMarkers(features, 'asset')
     addMarkers('asset')
     
-    map.setCenter([center.latitude,center.longitude])
+    map.setCenter([center.longitude, center.latitude])
     
     map.setZoom(4)
     
     map.setLayoutProperty('places','visibility','visible')
+    
 
 }
 
