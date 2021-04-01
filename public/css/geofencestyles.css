@@ -1,0 +1,30 @@
+#geoFenceViewForm{
+    width: 90%;
+    margin: auto;
+  }
+
+  .errorBox{
+  width: 100%;
+  color: red;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.successBox{
+  width: 100%;
+  color: rgb(108, 235, 108);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#geoFenceViewErrorBox{
+  display: none;
+}
+
+#geoFenceViewSuccessBox{
+  display: none;
+}
+
+.mapbox-gl-draw_line {
+background-image: url(/assets/imgs/circle-16.png) !important;
+}
