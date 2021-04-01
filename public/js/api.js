@@ -40,12 +40,11 @@ try{
         setTimelineViewErrorMessage(response.message)
         return
     }
-
     const center = response.timeline.center
     response = response.timeline.data
 
     let features = []
-    const {_id, assetType} = response
+    const {_id, assetType, geofence} = response
     
     response.location.forEach(location => {
 
@@ -63,13 +62,14 @@ try{
             },
             'geometry': {
             'type': 'Point',
-            'coordinates': [location.latitude, location.longitude]
+            'coordinates': [location.longitude, location.latitude]
             }
         })
 
         })
 
-        setTimeLineView(features, center)
+        setTimeLineView(features, center, geofence)
+        document.querySelector('#timelineViewID').value = _id
         clearTimelineViewErrorMessage()
 
     }
@@ -156,7 +156,7 @@ async function setAllAssets(markers=100, assetType=undefined, id=undefined){
                     },
                     'geometry': {
                     'type': 'Point',
-                    'coordinates': [asset.latitude, asset.longitude]
+                    'coordinates': [asset.longitude, asset.latitude]
                     }
                 })
 
@@ -165,7 +165,7 @@ async function setAllAssets(markers=100, assetType=undefined, id=undefined){
             setAllAssetsView(features, center)
 
             // update the center for asset view state
-            allAssetViewState.center = [center.latitude, center.longitude]
+            allAssetViewState.center = [center.longitude, center.latitude]
 
             clearAssetViewErrorMessage()
 

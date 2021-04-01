@@ -34,13 +34,13 @@ var map = new mapboxgl.Map({
                 <strong>Time:</strong> ${dateTime.time}<br>
                 <strong>Date:</strong> ${dateTime.date}<br>
                 <center>
-                <a href='javascript:void(0)' onclick='setTimeLine("${asset._id}")'>Get Timeline</a>
+                <a class='timelineLink' href='javascript:void(0)' onclick='setTimeLine("${asset._id}")'>Get Timeline</a>
                 </center>
                 </p>`
                 },
                 'geometry': {
                 'type': 'Point',
-                'coordinates': [asset.latitude, asset.longitude]
+                'coordinates': [asset.longitude, asset.latitude]
                 }
             })
 
@@ -87,7 +87,34 @@ var map = new mapboxgl.Map({
                 }
                 });
 
-        const allLayers = ['places', 'timeline']
+                map.addSource('geofence', {
+                    type: 'geojson',
+                    data: {
+                    "type": "FeatureCollection",
+                    "features": [{
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                    "type": "Polygon",
+                    "coordinates": []
+                    }
+                    }]
+                    }
+                    });
+
+            
+                map.addLayer({
+                    'id': 'fence',
+                    'type': 'fill',
+                    'source': 'geofence',
+                    'layout': {},
+                    "paint": {
+                        "fill-color": "#cac2e7",
+                        'fill-opacity': 0.4
+                      }
+                    });
+
+        const allLayers = ['places', 'timeline', 'fence']
 
     for(let i=0 ; i<allLayers.length ; i++){
 
