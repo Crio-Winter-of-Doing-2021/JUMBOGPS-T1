@@ -4,13 +4,13 @@ const Asset = require('../models/asset')
 const Notification = require('../models/notification')
 const geolib = require('geolib')
 const mongoose = require('mongoose')
-const auth = require('../middleware/auth')
+const apiAuth = require('../middleware/apiAuth')
 
 // google map's algorithm based anomaly detection 
 const {isLocationOnPath} = require('../utils/routeTracking')
 
 // location data comes here
-router.post('/assets/:id/location',  async (req, res) => {
+router.post('/assets/:id/location',  apiAuth, async (req, res) => {
 
 try{
     const locationData = req.body.data
@@ -116,7 +116,7 @@ try{
  })
  
  // filter: startTime and endTime
- router.get('/assets/:id/timeline', async (req, res) => {
+ router.get('/assets/:id/timeline', apiAuth, async (req, res) => {
   
      try{
 
@@ -188,7 +188,7 @@ try{
  
  
   // gets last location
-  router.get('/assets/:id/last-location', async (req, res) => {
+  router.get('/assets/:id/last-location', apiAuth, async (req, res) => {
   
      try{
  
@@ -214,7 +214,7 @@ try{
   // filter: assetType , limit: default=100 
   // /locations
 
-  router.get('/assets/list/location', async (req, res) => {
+  router.get('/assets/list/location', apiAuth, async (req, res) => {
  
      const numMarkers = req.query.markers ? parseInt(req.query.markers) : 100 ;
  
@@ -272,7 +272,7 @@ try{
  
   })
 
-  router.post('/assets/:id/geofence', async (req, res) => {
+  router.post('/assets/:id/geofence', apiAuth, async (req, res) => {
 
         try{
 
@@ -320,7 +320,7 @@ try{
 
   })
 
-  router.post('/assets/:id/georoute', async (req, res) => {
+  router.post('/assets/:id/georoute', apiAuth,async (req, res) => {
 
     try{
 
