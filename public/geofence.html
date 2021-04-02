@@ -8,7 +8,7 @@
 
      <!-- Bootstrap CSS -->
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    
+     <link rel="stylesheet" href="/css/loader.css">
      <link rel="stylesheet" href="/css/geofencestyles.css">
 
     <!-- Mapbox CDN -->
@@ -87,7 +87,10 @@
 
             </div>
 
-            <div class="col-md-9" id='map' style="height: 100vh;"></div>
+            <div class="col-md-9" id='map' style="height: 100vh;">
+              <div class="spinner-wrapper">
+                <div class="lds-dual-ring"></div>
+            </div></div>
 
         </div>
 
@@ -106,8 +109,8 @@
     <script src="/js/logout.js"></script>
     <script src='/js/resolveName.js'></script>
     <script src="/js/token.js"></script>
+    <script src="/js/loader.js"></script>
     <script src="/js/geofenceMap.js"></script>
-    <script src="/js/onLoadGeofence.js"></script>
     <script src="/js/RadiusMode.js"></script>
     <script src="/js/draw.js"></script>
     <script src="/js/setGeoFence.js"></script>

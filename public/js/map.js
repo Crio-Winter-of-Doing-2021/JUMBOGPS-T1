@@ -11,7 +11,7 @@ var map = new mapboxgl.Map({
     });
 
     map.on('load', async function () {
-
+        
         let response = await getAllAssets()
         response = JSON.parse(response)
 
@@ -150,6 +150,8 @@ var map = new mapboxgl.Map({
         });
 
     }
+
+    stopPreLoader()
 
 
 });
