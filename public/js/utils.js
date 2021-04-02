@@ -115,6 +115,8 @@ const removeMarkers = (view) => {
 
 const setTimeLineView = (features, center, geofence) => {
 
+    startPreLoader()
+
     closePopups()
     document.querySelector('#viewSelector').value = 'Timeline'
     document.querySelector('#assetViewContainer').style.display = 'none'
@@ -165,9 +167,13 @@ const setTimeLineView = (features, center, geofence) => {
     map.setLayoutProperty('timeline','visibility','visible')
     map.setLayoutProperty('fence','visibility','visible')
 
+    stopPreLoader()
+
 }
 
 const setAllAssetsView = (features, center) => {
+    
+    startPreLoader()
     
     closePopups()
 
@@ -188,6 +194,8 @@ const setAllAssetsView = (features, center) => {
     map.setZoom(4)
     
     map.setLayoutProperty('places','visibility','visible')
+
+    stopPreLoader()
     
 
 }
@@ -238,3 +246,4 @@ const clearTimelineViewErrorMessage = () => {
     errorBox.style.display = 'none'
 
 }
+
