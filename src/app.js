@@ -56,6 +56,8 @@ connection.once('open', () => {
 
     const notificationStream = connection.collection('notifications').watch()
 
+    const locationStream = connection.collection('assets').watch()
+
     notificationStream.on('change', change => {
         if(change.operationType === 'insert'){
             const notification = change.fullDocument
@@ -68,6 +70,36 @@ connection.once('open', () => {
             }
             
         }
+    })
+
+    locationStream.on('change', change => {
+
+        if(change.operationType === 'update'){
+
+            const keys = Object.keys(change.updateDescription.updatedFields)
+            
+            /* mongo db oplog has some inconsistency while returning updatedFields
+               so a direct pipeline can not be defined hence taking this approach 
+            */ 
+            
+            for(key in keys){
+
+                const rawUpdatedField = keys[key].split('.')
+                const updatedField = rawUpdatedField[0]
+
+                if(updatedField === 'location'){
+                    const updatedAssetID = change.documentKey._id
+                    io.sockets.emit('assetMovement', updatedAssetID)
+                    console.log('Location Update Message Sent')
+                    break;
+                }
+
+         }
+
+            
+
+        }
+
     })
 
 })
