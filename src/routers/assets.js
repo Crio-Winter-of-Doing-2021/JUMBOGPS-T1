@@ -243,7 +243,9 @@ try{
        const coords = []
  
        assets.forEach(asset => {
- 
+        
+        if(asset.location.length !== 0){
+            
          const lastLocation = asset.location[asset.location.length - 1]
          coords.push({
              latitude: lastLocation.latitude,
@@ -257,6 +259,8 @@ try{
                  longitude: lastLocation.longitude,
                  time: lastLocation.timestamp
              })
+            
+            }
  
        })
  

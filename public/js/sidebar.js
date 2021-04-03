@@ -4,6 +4,9 @@ let timelineViewContainer = document.querySelector('#timelineViewContainer')
 document.querySelector('#viewSelector').addEventListener('change', function() {
  const view = this.value
 
+ // user would manually provide an ID 
+ 
+ document.querySelector('#currentTimelineID').value = 'none'
  if(view == 'Asset'){
     timelineViewContainer.style.display = "none"
     assetViewContainer.style.display = "block"

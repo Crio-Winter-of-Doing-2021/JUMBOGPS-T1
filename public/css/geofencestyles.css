@@ -28,3 +28,10 @@
 .mapbox-gl-draw_line {
 background-image: url(/assets/imgs/circle-16.png) !important;
 }
+
+@media (max-width: 767px) {
+  .mobileViewStretch {
+      min-height: 700px !important;
+      width: 90%;
+  } 
+}

@@ -44,3 +44,55 @@ toastr.options = {
       
       toastr["error"](message)
     })
+
+    socket.on('assetMovement', assetID => {
+
+      if(document.querySelector('#assetViewRealTime').checked){
+
+        // update the asset view 
+        setTimeout(() => {
+
+          try{
+
+            // if still in realtime asset tracking 
+            if(document.querySelector('#assetViewRealTime').checked){
+
+                setAllAssets(100, undefined, undefined, 'silent')
+
+            }
+
+          }catch (e){
+
+              console.log(e)
+
+          }
+
+        }, 5000)
+
+      }else if(document.querySelector('#timelineViewRealTime').checked){
+
+        if(document.querySelector('#currentTimelineID').value === assetID){
+
+          // update the time line view 
+
+          setTimeout(() => {
+
+            try{
+
+              // if still realtime asset timeline tracking
+              if(document.querySelector('#timelineViewRealTime').checked){
+                setTimeLine(assetID, undefined, undefined, 'silent')
+              }
+
+            }catch (e){
+              console.log(e)
+            }
+
+          }, 5000)
+
+        }
+        
+      }
+    
+
+    })
