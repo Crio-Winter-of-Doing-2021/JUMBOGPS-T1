@@ -30,7 +30,12 @@ async function getTimeLine(id, startTime=undefined, endTime=undefined){
 }
 
 // set asset Timeline by id for an asset
-async function setTimeLine(id,startTime=undefined,endTime=undefined){
+async function setTimeLine(id,startTime=undefined,endTime=undefined, mode=undefined){
+
+    // do not change view if asset View Realtime is On 
+    if(document.querySelector('#assetViewRealTime').checked){
+        return
+    }
 
 try{
     let response = await getTimeLine(id, startTime, endTime);
@@ -38,14 +43,20 @@ try{
 
     if(response.status>=400 && response.status<=499){
         setTimelineViewErrorMessage(response.message)
+        document.querySelector('#currentTimelineID').value = 'none'
         return
     }
+
+    // set this for realtime tracking purposes
+    document.querySelector('#currentTimelineID').value = id
+
     const center = response.timeline.center
     response = response.timeline.data
 
     let features = []
-    const {_id, assetType, geofence} = response
     
+    const {_id, assetType, geofence, presetroute} = response
+
     response.location.forEach(location => {
 
         const dateTime = toDateTime(location.timestamp)
@@ -68,9 +79,17 @@ try{
 
         })
 
-        setTimeLineView(features, center, geofence)
-        document.querySelector('#timelineViewID').value = _id
-        clearTimelineViewErrorMessage()
+        if(mode === 'silent'){
+            const lastLocation = response.location[response.location.length -1]
+            const center = [lastLocation.longitude, lastLocation.latitude]
+            setTimeLineViewSilent(features, center, geofence, presetroute)
+        }else{
+            setTimeLineView(features, center, geofence, presetroute)
+            document.querySelector('#timelineViewID').value = _id
+            clearTimelineViewErrorMessage()
+        }
+
+        
 
     }
     catch (e){
@@ -114,7 +133,8 @@ async function getAllAssets(markers=100, type, id){
 
 }
 
-async function setAllAssets(markers=100, assetType=undefined, id=undefined){
+async function setAllAssets(markers=100, assetType=undefined, id=undefined, mode=undefined){
+
         
         try{
             let response = await getAllAssets(markers, assetType, id)
@@ -150,7 +170,7 @@ async function setAllAssets(markers=100, assetType=undefined, id=undefined){
                     <strong>Time:</strong> ${dateTime.time}<br>
                     <strong>Date:</strong> ${dateTime.date}<br>
                     <center>
-                    <a href='javascript:void(0)' onclick='setTimeLine("${asset._id}")'>Get Timeline</a>
+                    <a class='timelineLink' href='javascript:void(0)' onclick='setTimeLine("${asset._id}")'>Get Timeline</a>
                     </center>
                     </p>`
                     },
@@ -162,7 +182,12 @@ async function setAllAssets(markers=100, assetType=undefined, id=undefined){
 
             })
 
-            setAllAssetsView(features, center)
+            if(mode === 'silent'){
+                setAllAssetsViewSilent(features)
+            }else{
+                setAllAssetsView(features, center)
+            }
+            
 
             // update the center for asset view state
             allAssetViewState.center = [center.longitude, center.latitude]
