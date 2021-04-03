@@ -15,11 +15,11 @@ var map = new mapboxgl.Map({
         let response = await getAllAssets()
         response = JSON.parse(response)
 
-
         // ALL ASSETS CODE
 
         const assetData = response.response
         let features = []
+
         assetData.forEach(asset => {
 
             const dateTime = toDateTime(asset.time)
@@ -36,7 +36,8 @@ var map = new mapboxgl.Map({
                 <center>
                 <a class='timelineLink' href='javascript:void(0)' onclick='setTimeLine("${asset._id}")'>Get Timeline</a>
                 </center>
-                </p>`
+                </p>`,
+                'assetID': asset._id
                 },
                 'geometry': {
                 'type': 'Point',
@@ -114,7 +115,36 @@ var map = new mapboxgl.Map({
                       }
                     });
 
-        const allLayers = ['places', 'timeline', 'fence']
+                    map.addSource('route', {
+                        type: 'geojson',
+                    data: {
+                    "type": "FeatureCollection",
+                    "features": [{
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                    "type": "LineString",
+                    "coordinates": []
+                    }
+                    }]
+                    }
+                        });
+
+                        map.addLayer({
+                            'id': 'route',
+                            'type': 'line',
+                            'source': 'route',
+                            'layout': {
+                            'line-join': 'round',
+                            'line-cap': 'round'
+                            },
+                            'paint': {
+                            'line-color': '#6366f1',
+                            'line-width': 4
+                            }
+                            });
+
+        const allLayers = ['places', 'timeline', 'fence', 'route']
 
     for(let i=0 ; i<allLayers.length ; i++){
 
