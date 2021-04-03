@@ -24,3 +24,10 @@
 #geoRouteViewSuccessBox{
   display: none;
 }
+
+@media (max-width: 767px) {
+  .mobileViewStretch {
+      min-height: 700px !important;
+      width: 90%;
+  } 
+}
