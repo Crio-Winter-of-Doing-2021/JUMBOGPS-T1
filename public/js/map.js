@@ -51,32 +51,32 @@ var map = new mapboxgl.Map({
         addMarkers('asset')
         
 
-        map.addSource('places', {
-        'type': 'geojson',
-        'data': {
-        'type': 'FeatureCollection',
-        features
-        }
-        });
-
-        // Add a layer showing the places.
-        map.addLayer({
-        'id': 'places',
-        'type': 'symbol',
-        'source': 'places',
-        'layout': {
-        'icon-image': '{icon}-15',
-        'icon-allow-overlap': true
-        }
-        });
-
-        map.addSource('timeline', {
+            map.addSource('places', {
             'type': 'geojson',
             'data': {
             'type': 'FeatureCollection',
-            'features': []
+            features
             }
             });
+
+        // Add a layer showing the places.
+            map.addLayer({
+            'id': 'places',
+            'type': 'symbol',
+            'source': 'places',
+            'layout': {
+            'icon-image': '{icon}-15',
+            'icon-allow-overlap': true
+            }
+            });
+
+            map.addSource('timeline', {
+                'type': 'geojson',
+                'data': {
+                'type': 'FeatureCollection',
+                'features': []
+                }
+                });
 
             map.addLayer({
                 'id': 'timeline',
@@ -88,63 +88,92 @@ var map = new mapboxgl.Map({
                 }
                 });
 
-                map.addSource('geofence', {
-                    type: 'geojson',
-                    data: {
-                    "type": "FeatureCollection",
-                    "features": [{
-                    "type": "Feature",
-                    "properties": {},
-                    "geometry": {
-                    "type": "Polygon",
-                    "coordinates": []
-                    }
-                    }]
-                    }
-                    });
+            map.addSource('geofence', {
+                type: 'geojson',
+                data: {
+                "type": "FeatureCollection",
+                "features": [{
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                "type": "Polygon",
+                "coordinates": []
+                }
+                }]
+                }
+                });
 
             
-                map.addLayer({
-                    'id': 'fence',
-                    'type': 'fill',
-                    'source': 'geofence',
-                    'layout': {},
-                    "paint": {
-                        "fill-color": "#cac2e7",
-                        'fill-opacity': 0.4
-                      }
+            map.addLayer({
+                'id': 'fence',
+                'type': 'fill',
+                'source': 'geofence',
+                'layout': {},
+                "paint": {
+                    "fill-color": "#cac2e7",
+                    'fill-opacity': 0.4
+                    }
+                });
+
+            map.addSource('route', {
+                type: 'geojson',
+            data: {
+            "type": "FeatureCollection",
+            "features": [{
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+            "type": "LineString",
+            "coordinates": []
+            }
+            }]
+            }
+                });
+
+            map.addLayer({
+                'id': 'route',
+                'type': 'line',
+                'source': 'route',
+                'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+                },
+                'paint': {
+                'line-color': '#4F7942',
+                'line-width': 2
+                }
+                });
+
+            map.addSource('path', {
+                    type: 'geojson',
+                data: {
+                "type": "FeatureCollection",
+                "features": [{
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                "type": "LineString",
+                "coordinates": []
+                }
+                }]
+                }
                     });
+        
+            map.addLayer({
+                'id': 'path',
+                'type': 'line',
+                'source': 'path',
+                'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+                },
+                'paint': {
+                'line-color': '#6366f1',
+                'line-width': 2
+                }
+                });
 
-                    map.addSource('route', {
-                        type: 'geojson',
-                    data: {
-                    "type": "FeatureCollection",
-                    "features": [{
-                    "type": "Feature",
-                    "properties": {},
-                    "geometry": {
-                    "type": "LineString",
-                    "coordinates": []
-                    }
-                    }]
-                    }
-                        });
-
-                        map.addLayer({
-                            'id': 'route',
-                            'type': 'line',
-                            'source': 'route',
-                            'layout': {
-                            'line-join': 'round',
-                            'line-cap': 'round'
-                            },
-                            'paint': {
-                            'line-color': '#6366f1',
-                            'line-width': 4
-                            }
-                            });
-
-        const allLayers = ['places', 'timeline', 'fence', 'route']
+        const allLayers = ['places', 'timeline', 'fence', 'route', 'path']
 
     for(let i=0 ; i<allLayers.length ; i++){
 
