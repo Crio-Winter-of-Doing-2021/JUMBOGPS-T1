@@ -113,6 +113,37 @@ const removeMarkers = (view) => {
 
 }
 
+const setUpPath = (Features) => {
+
+        if(Features.length === 0){
+            return;
+        }
+
+        console.log(Features)
+
+        const coordinates = []
+
+        //coordinates.push([])
+
+        Features.forEach(feature => coordinates.push([feature.geometry.coordinates[0], feature.geometry.coordinates[1]]))
+
+        const features = []
+
+        features.push({
+                
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+            "type": "LineString",
+            "coordinates": coordinates
+            }
+            
+    })
+
+        map.getSource('path').setData({'type': 'FeatureCollection', features})
+
+}
+
 const setTimeLineView = (features, center, geofence, presetroute) => {
 
     startPreLoader()
@@ -126,6 +157,7 @@ const setTimeLineView = (features, center, geofence, presetroute) => {
     map.setLayoutProperty('places','visibility','none')
     map.setLayoutProperty('fence','visibility','none')
     map.setLayoutProperty('route','visibility','none')
+    map.setLayoutProperty('path','visibility','none')
 
     if(geofence.length != 0 ){
         // geofence exists
@@ -195,6 +227,8 @@ const setTimeLineView = (features, center, geofence, presetroute) => {
     map.setLayoutProperty('timeline','visibility','visible')
     map.setLayoutProperty('fence','visibility','visible')
     map.setLayoutProperty('route','visibility','visible')
+    setUpPath(features)
+    map.setLayoutProperty('path','visibility','visible')
 
     stopPreLoader()
 
@@ -210,6 +244,7 @@ const setAllAssetsView = (features, center) => {
     map.setLayoutProperty('timeline','visibility','none')
     map.setLayoutProperty('fence','visibility','none')
     map.setLayoutProperty('route','visibility','none')
+    map.setLayoutProperty('path','visibility','none')
 
     // setData() only requires geoJSON data variable
     map.getSource('places').setData({'type': 'FeatureCollection', features})
@@ -238,6 +273,7 @@ const setAllAssetsViewSilent = (features) => {
     map.setLayoutProperty('timeline','visibility','none')
     map.setLayoutProperty('fence','visibility','none')
     map.setLayoutProperty('route','visibility','none')
+    map.setLayoutProperty('path','visibility','none')
 
     // setData() only requires geoJSON data variable
     map.getSource('places').setData({'type': 'FeatureCollection', features})
@@ -264,6 +300,7 @@ const setTimeLineViewSilent = (features, center, geofence, presetroute) => {
     map.setLayoutProperty('places','visibility','none')
     map.setLayoutProperty('fence','visibility','none')
     map.setLayoutProperty('route','visibility','none')
+    map.setLayoutProperty('path','visibility','none')
 
     if(geofence.length != 0 ){
         // geofence exists
@@ -330,6 +367,8 @@ const setTimeLineViewSilent = (features, center, geofence, presetroute) => {
     map.setLayoutProperty('timeline','visibility','visible')
     map.setLayoutProperty('fence','visibility','visible')
     map.setLayoutProperty('route','visibility','visible')
+    setUpPath(features)
+    map.setLayoutProperty('path','visibility','visible')
 
 }
 
@@ -340,6 +379,8 @@ const showAssetsView = () => {
     // hide a layer
     map.setLayoutProperty('timeline','visibility','none')
     map.setLayoutProperty('fence','visibility','none')
+    map.setLayoutProperty('route','visibility','none')
+    map.setLayoutProperty('path','visibility','none')
 
     const features = map.getSource('places')._data.features
     removeMarkers('timeline')
