@@ -1,33 +1,29 @@
 const express = require('express')
 const router = express.Router()
-
 const path = require("path")
-
-const publicDirPath = path.join(__dirname, '../../public/')
-
 const auth = require('../middleware/auth')
 
 router.get('/', auth, (req, res) => {
     
-    res.sendFile(publicDirPath+'/home.html');
+    res.render('home');
 
 })
 
 router.get('/geofence', auth, (req, res) => {
 
-    res.sendFile(publicDirPath+'/geofence.html');
+    res.render('geofence');
 
 })
 
 router.get('/georoute', auth, (req, res) => {
 
-    res.sendFile(publicDirPath+'/georoute.html');
+    res.render('georoute')
 
 })
 
 router.get('/login', (req, res) => {
 
-    res.sendFile(publicDirPath+'/login.html');
+    res.render('login')
 
 })
 

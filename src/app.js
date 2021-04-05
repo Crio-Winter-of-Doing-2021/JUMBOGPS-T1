@@ -2,12 +2,14 @@ const environmentPath = require('path').join(__dirname+'/config/dev.env')
 require('dotenv').config({ path: environmentPath })
 
 const express = require('express')
-
+const hbs = require('hbs')
 const http = require('http')
 const socketio = require('socket.io')
 const cookieParser = require('cookie-parser')
 const path = require("path")
 const publicDirPath = path.join(__dirname, '../public/')
+const viewsPath = path.join(__dirname, '../public/templates/views')
+const partialsPath = path.join(__dirname, '../public/templates/partials')
 const assetRouter = require('./routers/assets')
 const userRouter = require('./routers/users')
 const uiRouter = require('./routers/ui')
@@ -24,6 +26,10 @@ io.on("connection", (socket) => {
     });
 
   });
+
+app.set('view engine', 'hbs')
+app.set('views', viewsPath)
+hbs.registerPartials(partialsPath)
 
 app.use(express.static(publicDirPath))
 app.use(express.json())
