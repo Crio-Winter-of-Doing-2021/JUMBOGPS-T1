@@ -6,3 +6,4 @@ const draw = new MapboxDraw({
 });
 
 geoRouteMap.addControl(draw);
+geoRouteMap.addControl(new mapboxgl.NavigationControl());
