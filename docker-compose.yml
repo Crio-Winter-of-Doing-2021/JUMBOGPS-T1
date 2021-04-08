@@ -1,0 +1,12 @@
+version: '3'
+services:
+ app:
+  container_name: docker-Jumbotail-Asset-Tracking
+  restart: always
+  build: .
+  ports:
+   - '3000:3000'
+  environment:
+   - MONGO_URI=<mongoDB_Atlas_Connection_String_Without_quotes_here>
+   - JWT_SECRET=your_jwtsecret_without_quotes
+
