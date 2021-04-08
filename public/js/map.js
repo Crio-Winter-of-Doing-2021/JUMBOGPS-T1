@@ -10,6 +10,8 @@ var map = new mapboxgl.Map({
     zoom:4
     });
 
+    map.addControl(new mapboxgl.NavigationControl());
+
     map.on('load', async function () {
         
         let response = await getAllAssets()

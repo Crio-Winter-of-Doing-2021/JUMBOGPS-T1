@@ -10,4 +10,5 @@ const draw = new MapboxDraw({
 });
 
 geoFencingMap.addControl(draw);
+geoFencingMap.addControl(new mapboxgl.NavigationControl());
 
